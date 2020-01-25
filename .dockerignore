@@ -1,0 +1,14 @@
+./.vscode/*
+./app/*
+./bin/*
+./config/*
+./db/*
+./lib/*
+./log/*
+./public/*
+./storage/*
+./test/*
+./tmp/*
+./vendor/*
+./.gitignore
+./.git/*
