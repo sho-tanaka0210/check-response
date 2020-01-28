@@ -1,4 +1,3 @@
-# FROM ruby:2.7.0
 FROM ruby:2.7.0-alpine3.11
 
 LABEL maintainer Mizukichi0210<canaryyellow.nl@gmail.com>
