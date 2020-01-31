@@ -22,7 +22,7 @@ RUN apk update && \
       postgresql \
       tzdata  \
       yarn && \
-    bundle install -j4 && \
-    apk del .build-dependencies
-  
-RUN bundle update && bundle install
+    bundle config set no-cache 'true' && \
+    bundle install -j4  && \
+    apk del .build-dependencies && \
+    bundle update && bundle install
