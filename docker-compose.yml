@@ -11,11 +11,23 @@ services:
       - db
     command: bundle exec rails s -p 80 -b '0.0.0.0'
     ports: 
-      - 80:80
+      - "80:80"
+  web_ssl:
+    build: .
+    image: ${PROJECT_NAME}_image
+    container_name: ${PROJECT_NAME}_web_ssl
+    working_dir: /confirm_rest_api
+    volumes: 
+      - .:/confirm_rest_api
+    depends_on: 
+      - db
+    command: bundle exec thin start --ssl -p 3001
+    ports: 
+      - "3001:3001"
   db:
     image: postgres:12.1-alpine
     container_name: ${PROJECT_NAME}_db
     ports: 
-      - 5432:5432
+      - "5432:5432"
     volumes: 
       - ./init:/docker-entrypoint-initdb.d
