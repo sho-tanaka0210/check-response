@@ -27,3 +27,6 @@ $ docker-compose build
 $ docker-compose up -d
 
 ```
+
+## System Diagram
+![System diagram](https://user-images.githubusercontent.com/37664176/73596611-e5a50780-4566-11ea-8fc3-7ff75e492673.png)
