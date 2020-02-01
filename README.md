@@ -1,10 +1,5 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
 * Ruby version
 
 * System dependencies
@@ -21,4 +16,14 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+## Usage
+
+```bash
+# Build
+$ docker-compose build
+
+# Run
+# You can access http://localhost and https://localhost:81
+$ docker-compose up -d
+
+```
