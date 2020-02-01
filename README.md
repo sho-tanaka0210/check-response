@@ -23,7 +23,7 @@
 $ docker-compose build
 
 # Run
-# You can access http://localhost and https://localhost:81
+# You can access http://localhost and https://localhost:3001
 $ docker-compose up -d
 
 ```
