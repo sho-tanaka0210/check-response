@@ -1,0 +1,27 @@
+# https://blog.meilcli.net/2019/09/29/155601
+
+name: Bundle Update
+on:
+  schedule:
+    - cron: '0 0 * * SUN'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: 
+      image: ruby:2.7.0-alpine3.11
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up node and yarn
+        run: |
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+          curl -sL https://deb.nodesource.com/setup_12.x | bash -
+          apt install -y nodejs yarn
+      - name: Update Gemfile.lock
+        run: bundle update
+      - name: Create a pull request
+        env:
+          USER_NAME: mizukichi0210
+          EMAIL: 37664176+Mizukichi0210@users.noreply.github.com
+          REPO_NAME: check-response
+        run: sudo sh update_gemfile_lock.sh ${{ secrets.API_TOKEN }} ${{ secrets.PASSWORD }} $USER_NAME $EMAIL $REPO_NAME
