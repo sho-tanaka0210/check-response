@@ -42,3 +42,47 @@ PUT _ingest/pipeline/remove_firestore_wrappers
     }
   ]
 }
+
+---
+
+POST your-index/_update_by_query?conflicts=proceed
+{
+  "script": {
+    "lang": "painless",
+    "source": """
+      // 再帰的に Map を辿り、各種 Value ラッパーをプリミティブに置き換える関数
+      void stripValues(Map m) {
+        for (entry in m.entrySet()) {
+          def v = entry.getValue();
+          if (v instanceof Map) {
+            if      (v.containsKey('stringValue'))  { entry.setValue(v.stringValue); }
+            else if (v.containsKey('integerValue')) { entry.setValue(v.integerValue); }
+            else if (v.containsKey('doubleValue'))  { entry.setValue(v.doubleValue); }
+            else if (v.containsKey('booleanValue')) { entry.setValue(v.booleanValue); }
+            else if (v.containsKey('nullValue'))    { entry.setValue(null); }
+            else if (v.containsKey('mapValue')) {
+              def fields = v.mapValue.fields;
+              entry.setValue(fields != null ? fields : [:]);
+              stripValues((Map)entry.getValue());
+            }
+            else if (v.containsKey('arrayValue')) {
+              def arr = v.arrayValue.values;
+              entry.setValue(arr != null ? arr : []);
+              for (item in entry.getValue()) {
+                if (item instanceof Map) {
+                  stripValues((Map)item);
+                }
+              }
+            }
+            else {
+              // ほかのネストした Map はさらに掘り下げ
+              stripValues(v);
+            }
+          }
+        }
+      }
+      // ドキュメント全体を処理
+      stripValues(ctx._source);
+    """
+  }
+}
